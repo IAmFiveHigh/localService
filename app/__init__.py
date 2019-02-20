@@ -2,6 +2,7 @@
   created by IAmFiveHigh on 2019-02-20
  """
 from flask import Flask
+from app.models.base import db
 
 
 def create_app():
@@ -11,6 +12,8 @@ def create_app():
 
     register_blueprint(app)
 
+    db.init_app(app)
+    db.create_all(app=app)
     return app
 
 

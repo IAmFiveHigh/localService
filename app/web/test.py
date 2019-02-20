@@ -4,6 +4,7 @@
 
 from . import web
 
+
 @web.route('/test/<content>')
 def test(content):
     return '<p>content</p>'
