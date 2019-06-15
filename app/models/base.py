@@ -48,8 +48,7 @@ class Base(db.Model):
         kv = {}
         for k in columns:
             if type(k) == str:
-                if getattr(self, k):
-                    kv[k] = getattr(self, k)
+                kv[k] = getattr(self, k)
         kv['create_time'] = self.create_datetime
         return dict(kv)
 

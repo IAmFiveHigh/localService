@@ -3,7 +3,7 @@
  """
 from . import web
 from sqlalchemy import desc
-from flask import jsonify, make_response
+from flask import jsonify, make_response, request
 from app.models.classic import Classic
 from app.models.base import db, Base
 
@@ -50,6 +50,49 @@ def classic_index_next(index):
         res.response = '没有数据'
         res.status_code = 400
         return res
+
+
+@web.route('/like', methods=['POST'])
+def classic_like():
+    id = request.json['art_id']
+    type = request.json['type']
+    classic = Classic.query.filter_by(id=id).first()
+    res = make_response()
+    if classic:
+        if classic.like_status == 0:
+            classic.like_status = 1
+            db.session.commit()
+            res.response = '点赞成功'
+            res.status_code = 200
+        else:
+            res.response = '已经是点赞状态'
+            res.status_code = 400
+    else:
+        res.response = '不存在当前classic'
+        res.status_code = 400
+    return res
+
+
+@web.route('/like/cancel', methods=['POST'])
+def classic_like_cancel():
+    id = request.json['art_id']
+    type = request.json['type']
+    classic = Classic.query.filter_by(id=id).first()
+    res = make_response()
+    if classic:
+        if classic.like_status == 1:
+            classic.like_status = 0
+            db.session.commit()
+            res.response = '取消点赞成功'
+            res.status_code = 200
+        else:
+            res.response = '已经是未点赞状态'
+            res.status_code = 400
+    else:
+        res.response = '不存在当前classic'
+        res.status_code = 400
+    return res
+
 
 @web.route('/classic/addlatest')
 def classic_add_latest():
