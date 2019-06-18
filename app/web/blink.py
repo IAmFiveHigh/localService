@@ -94,6 +94,22 @@ def classic_like_cancel():
     return res
 
 
+@web.route('/classic/likestatus', methods=["POST"])
+def like_status():
+    id = request.json['art_id']
+    type = request.json['type']
+    classic = Classic.query.filter_by(id=id).first()
+    res = make_response()
+    if classic:
+        return jsonify({'art_id': id,
+                        'like_status': classic.like_status,
+                        'fav_num:': classic.fav_num})
+    else:
+        res.status_code = 400
+        res.response = '不存在此classic'
+        return res
+
+
 @web.route('/classic/addlatest')
 def classic_add_latest():
     temp = {
